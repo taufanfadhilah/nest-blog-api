@@ -28,7 +28,18 @@ export class PostsService {
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+    const post = this.posts.find((post) => post.id === id);
+    if (!post) {
+      return null;
+    }
+
+    const { user_id, content, title } = updatePostDto;
+    post.user_id = user_id;
+    post.content = content;
+    post.title = title;
+    post.updated_at = new Date();
+
+    return post;
   }
 
   remove(id: number) {

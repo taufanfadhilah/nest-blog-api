@@ -37,12 +37,22 @@ export class PostsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+    const post = this.postsService.findOne(+id);
+    return {
+      success: true,
+      message: 'Get a post',
+      data: post,
+    };
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+    const post = this.postsService.update(+id, updatePostDto);
+    return {
+      success: true,
+      message: 'Post updated successfully',
+      data: post,
+    };
   }
 
   @Delete(':id')
