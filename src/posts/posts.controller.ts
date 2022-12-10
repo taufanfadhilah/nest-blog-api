@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Response } from 'express';
 
 @Controller('posts')
 export class PostsController {
@@ -46,8 +48,19 @@ export class PostsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Res() res: Response,
+  ) {
     const post = this.postsService.update(+id, updatePostDto);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found',
+        data: null,
+      });
+    }
     return {
       success: true,
       message: 'Post updated successfully',
