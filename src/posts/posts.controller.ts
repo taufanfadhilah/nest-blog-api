@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -55,7 +56,7 @@ export class PostsController {
   ) {
     const post = this.postsService.update(+id, updatePostDto);
     if (!post) {
-      return res.status(404).json({
+      return res.status(HttpStatus.NOT_FOUND).json({
         success: false,
         message: 'Post not found',
         data: null,
@@ -72,13 +73,13 @@ export class PostsController {
   remove(@Param('id') id: string, @Res() res: Response) {
     const isDeleted = this.postsService.remove(+id);
     if (!isDeleted) {
-      return res.status(404).json({
+      return res.status(HttpStatus.NOT_FOUND).json({
         success: false,
         message: 'Post not found',
       });
     }
 
-    return res.status(200).json({
+    return res.status(HttpStatus.OK).json({
       success: true,
       message: 'Post deleted successfully',
     });
