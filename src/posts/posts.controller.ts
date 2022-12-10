@@ -69,7 +69,18 @@ export class PostsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('id') id: string, @Res() res: Response) {
+    const isDeleted = this.postsService.remove(+id);
+    if (!isDeleted) {
+      return res.status(404).json({
+        success: false,
+        message: 'Post not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Post deleted successfully',
+    });
   }
 }

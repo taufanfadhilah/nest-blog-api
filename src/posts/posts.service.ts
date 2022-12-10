@@ -43,6 +43,12 @@ export class PostsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} post`;
+    const postIndex = this.posts.findIndex((post) => post.id === id);
+    if (postIndex === -1) {
+      return false;
+    }
+
+    this.posts.splice(postIndex, 1);
+    return true;
   }
 }
