@@ -17,17 +17,22 @@ export class PostsController {
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
-    const posts = this.postsService.create(createPostDto);
+    const post = this.postsService.create(createPostDto);
     return {
       success: true,
       message: 'Post created successfully',
-      data: posts,
+      data: post,
     };
   }
 
   @Get()
   findAll() {
-    return this.postsService.findAll();
+    const posts = this.postsService.findAll();
+    return {
+      success: true,
+      message: 'Get all posts',
+      data: posts,
+    };
   }
 
   @Get(':id')
