@@ -2,18 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
+// interfaces
+import { IPost } from './interfaces';
+
 @Injectable()
 export class PostsService {
+  private posts: IPost[] = [];
   create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+    const data = {
+      ...createPostDto,
+      id: this.posts.length + 1,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    this.posts.push(data);
+    return this.findOne(data.id);
   }
 
   findAll() {
-    return `This action returns all posts`;
+    return this.posts;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} post`;
+    return this.posts.find((post) => post.id === id);
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

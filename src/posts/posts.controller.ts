@@ -17,7 +17,12 @@ export class PostsController {
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+    const posts = this.postsService.create(createPostDto);
+    return {
+      success: true,
+      message: 'Post created successfully',
+      data: posts,
+    };
   }
 
   @Get()
