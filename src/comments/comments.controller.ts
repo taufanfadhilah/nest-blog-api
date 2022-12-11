@@ -6,12 +6,15 @@ import {
   Param,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('comments')
+@UseGuards(AuthGuard('jwt'))
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
