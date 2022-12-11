@@ -35,6 +35,7 @@ export class AuthController {
   }
 
   @Get('me')
+  @UseGuards(AuthGuard('jwt'))
   async detail(@Request() req) {
     return {
       success: true,
