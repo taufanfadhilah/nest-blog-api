@@ -9,6 +9,7 @@ import {
   Res,
   HttpStatus,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -22,8 +23,11 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    const post = this.postsService.create(createPostDto);
+  create(@Req() req, @Body() createPostDto: CreatePostDto) {
+    const data: CreatePostDto = createPostDto;
+    data.user_id = req.user.id;
+
+    const post = this.postsService.create(data);
     return {
       success: true,
       message: 'Post created successfully',
@@ -54,9 +58,13 @@ export class PostsController {
   @Patch(':id')
   update(
     @Param('id') id: string,
+    @Req() req,
     @Body() updatePostDto: UpdatePostDto,
     @Res() res: Response,
   ) {
+    const data: UpdatePostDto = updatePostDto;
+    data.user_id = req.user.id;
+
     const post = this.postsService.update(+id, updatePostDto);
     if (!post) {
       return res.status(HttpStatus.NOT_FOUND).json({
@@ -65,6 +73,7 @@ export class PostsController {
         data: null,
       });
     }
+
     return {
       success: true,
       message: 'Post updated successfully',
