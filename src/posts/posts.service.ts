@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CommentsService } from 'src/comments/comments.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -8,7 +8,10 @@ import { IPost } from './interfaces';
 
 @Injectable()
 export class PostsService {
-  @Inject() private commentService: CommentsService;
+  constructor(
+    @Inject(forwardRef(() => CommentsService))
+    private commentService: CommentsService,
+  ) {}
 
   private posts: IPost[] = [];
   create(createPostDto: CreatePostDto) {
@@ -31,6 +34,9 @@ export class PostsService {
 
   findOne(id: number) {
     const comment = this.posts.find((post) => post.id === id);
+    if (!comment) {
+      return false;
+    }
     comment.comments = this.commentService.findByPostId(comment.id);
     return comment;
   }

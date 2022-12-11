@@ -8,14 +8,21 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
+  create(@Body() createCommentDto: CreateCommentDto, @Res() res: Response) {
     const comment = this.commentsService.create(createCommentDto);
 
-    return {
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Can not create comment, post not found',
+      });
+    }
+
+    return res.status(200).json({
       success: true,
       message: 'Comment created successfully',
       data: comment,
-    };
+    });
   }
 
   @Delete(':id')

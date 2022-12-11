@@ -7,5 +7,6 @@ import { CommentsModule } from 'src/comments/comments.module';
   controllers: [PostsController],
   providers: [PostsService],
   imports: [CommentsModule],
+  exports: [PostsService],
 })
 export class PostsModule {}
