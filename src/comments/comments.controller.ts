@@ -5,19 +5,29 @@ import {
   HttpStatus,
   Param,
   Post,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Controller('comments')
+@UseGuards(AuthGuard('jwt'))
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto, @Res() res: Response) {
-    const comment = this.commentsService.create(createCommentDto);
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+    @Req() req,
+    @Res() res: Response,
+  ) {
+    const data: CreateCommentDto = createCommentDto;
+    data.user_id = req.user.id;
+    const comment = this.commentsService.create(data);
 
     if (!comment) {
       return res.status(HttpStatus.NOT_FOUND).json({

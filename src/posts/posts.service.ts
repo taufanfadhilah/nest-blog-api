@@ -15,7 +15,7 @@ export class PostsService {
 
   private posts: IPost[] = [];
   create(createPostDto: CreatePostDto) {
-    const data = {
+    const data: IPost = {
       ...createPostDto,
       id: this.posts.length + 1,
       created_at: new Date(),
