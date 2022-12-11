@@ -39,4 +39,11 @@ export class CommentsService {
   findByPostId(postId: number) {
     return this.comments.filter((comment) => comment.post_id === postId);
   }
+
+  removeByPostId(postId: number) {
+    this.comments = this.comments.filter(
+      (comment) => comment.post_id !== postId,
+    );
+    return true;
+  }
 }

@@ -57,6 +57,7 @@ export class PostsService {
     }
 
     this.posts.splice(postIndex, 1);
+    this.commentService.removeByPostId(id);
     return true;
   }
 }
