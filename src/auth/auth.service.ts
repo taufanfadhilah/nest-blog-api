@@ -18,6 +18,13 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
+    const isExists = this.users.find(
+      (user) => user.email === registerDto.email,
+    );
+    if (isExists) {
+      return false;
+    }
+
     const user: IUser = {
       ...registerDto,
       id: this.getNewId(),
