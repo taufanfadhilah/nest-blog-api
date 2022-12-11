@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { PostsService } from 'src/posts/posts.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { IComment } from './interfaces';
 
 @Injectable()
 export class CommentsService {
+  constructor(
+    @Inject(forwardRef(() => PostsService))
+    private postsService: PostsService,
+  ) {}
+
   private comments: IComment[] = [];
 
   private getNewId() {
@@ -12,6 +18,11 @@ export class CommentsService {
   }
 
   create(createCommentDto: CreateCommentDto) {
+    const isPostExists = this.postsService.findOne(createCommentDto.post_id);
+    if (!isPostExists) {
+      return false;
+    }
+
     const comment: IComment = {
       ...createCommentDto,
       id: this.getNewId(),
@@ -33,6 +44,17 @@ export class CommentsService {
     }
 
     this.comments.splice(commentIndex, 1);
+    return true;
+  }
+
+  findByPostId(postId: number) {
+    return this.comments.filter((comment) => comment.post_id === postId);
+  }
+
+  removeByPostId(postId: number) {
+    this.comments = this.comments.filter(
+      (comment) => comment.post_id !== postId,
+    );
     return true;
   }
 }

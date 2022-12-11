@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { CommentsService } from 'src/comments/comments.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
@@ -7,6 +8,11 @@ import { IPost } from './interfaces';
 
 @Injectable()
 export class PostsService {
+  constructor(
+    @Inject(forwardRef(() => CommentsService))
+    private commentService: CommentsService,
+  ) {}
+
   private posts: IPost[] = [];
   create(createPostDto: CreatePostDto) {
     const data = {
@@ -20,11 +26,19 @@ export class PostsService {
   }
 
   findAll() {
-    return this.posts;
+    return this.posts.map((comment) => ({
+      ...comment,
+      comments: this.commentService.findByPostId(comment.id),
+    }));
   }
 
   findOne(id: number) {
-    return this.posts.find((post) => post.id === id);
+    const comment = this.posts.find((post) => post.id === id);
+    if (!comment) {
+      return false;
+    }
+    comment.comments = this.commentService.findByPostId(comment.id);
+    return comment;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
@@ -49,6 +63,7 @@ export class PostsService {
     }
 
     this.posts.splice(postIndex, 1);
+    this.commentService.removeByPostId(id);
     return true;
   }
 }
