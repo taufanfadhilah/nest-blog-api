@@ -35,4 +35,8 @@ export class CommentsService {
     this.comments.splice(commentIndex, 1);
     return true;
   }
+
+  findByPostId(postId: number) {
+    return this.comments.filter((comment) => comment.post_id === postId);
+  }
 }
