@@ -3,11 +3,13 @@ import * as bcrypt from 'bcrypt';
 import RegisterDto from './dto/register.dto';
 import IUser from './interfaces/user.interface';
 import LoginDto from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 const saltRounds = 10;
 
 @Injectable()
 export class AuthService {
+  constructor(private jwtService: JwtService) {}
   private users: IUser[] = [];
 
   private getNewId() {
@@ -49,6 +51,13 @@ export class AuthService {
     return {
       ...user,
       password: undefined,
+    };
+  }
+
+  generateToken(user: IUser) {
+    const payload = { email: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
     };
   }
 }
