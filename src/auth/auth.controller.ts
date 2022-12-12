@@ -12,12 +12,35 @@ import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import RegisterDto from './dto/register.dto';
+import {
+  LoginSuccessResponse,
+  RegisterEmailExistsResponse,
+  RegisterSuccessResponse,
+} from './responses';
+import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import LoginDto from './dto/login.dto';
+import { UnauthorizedResponse } from 'src/app.response';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @ApiBody({
+    description: 'success',
+    type: RegisterDto,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'success',
+    type: RegisterSuccessResponse,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'error: email is exists',
+    type: RegisterEmailExistsResponse,
+  })
   async register(@Body() registerDto: RegisterDto, @Res() res: Response) {
     const user = await this.authService.register(registerDto);
     if (!user) {
@@ -27,7 +50,7 @@ export class AuthController {
       });
     }
 
-    return res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.CREATED).json({
       success: true,
       message: 'User registered successfully',
       data: user,
@@ -36,6 +59,20 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(AuthGuard('local'))
+  @ApiBody({
+    description: 'success',
+    type: LoginDto,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'success',
+    type: LoginSuccessResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'unauthorized',
+    type: UnauthorizedResponse,
+  })
   login(@Request() req) {
     return {
       success: true,
