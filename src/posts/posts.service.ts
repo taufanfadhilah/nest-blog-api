@@ -4,7 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 // interfaces
-import { IPost } from './interfaces';
+import { IPost, IUserId } from './interfaces';
 
 @Injectable()
 export class PostsService {
@@ -14,7 +14,7 @@ export class PostsService {
   ) {}
 
   private posts: IPost[] = [];
-  create(createPostDto: CreatePostDto) {
+  create(createPostDto: CreatePostDto & IUserId) {
     const data: IPost = {
       ...createPostDto,
       id: this.posts.length + 1,
@@ -41,7 +41,7 @@ export class PostsService {
     return comment;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
+  update(id: number, updatePostDto: UpdatePostDto & IUserId) {
     const post = this.posts.find((post) => post.id === id);
     if (!post) {
       return null;

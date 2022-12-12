@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { PostsService } from 'src/posts/posts.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { IComment } from './interfaces';
+import { IComment, IUserId } from './interfaces';
 
 @Injectable()
 export class CommentsService {
@@ -17,7 +17,7 @@ export class CommentsService {
     return this.comments[commentLength - 1]?.id + 1 || 1;
   }
 
-  create(createCommentDto: CreateCommentDto) {
+  create(createCommentDto: CreateCommentDto & IUserId) {
     const isPostExists = this.postsService.findOne(createCommentDto.post_id);
     if (!isPostExists) {
       return false;
