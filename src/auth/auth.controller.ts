@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Post,
@@ -19,7 +20,7 @@ import {
 } from './responses';
 import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
 import LoginDto from './dto/login.dto';
-import { UnauthorizedResponse } from 'src/app.response';
+import { SuccessResponse, UnauthorizedResponse } from 'src/app.response';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -83,11 +84,31 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+    type: RegisterSuccessResponse,
+  })
   async detail(@Request() req) {
     return {
       success: true,
       message: 'Get current user',
       data: req.user,
+    };
+  }
+
+  @Delete('reset')
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+    type: SuccessResponse,
+  })
+  async reset() {
+    await this.authService.reset();
+    return {
+      success: true,
+      message: 'Reset users successfully',
+      data: null,
     };
   }
 }
