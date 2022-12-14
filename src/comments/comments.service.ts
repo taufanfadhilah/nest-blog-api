@@ -57,4 +57,8 @@ export class CommentsService {
     );
     return true;
   }
+
+  reset() {
+    this.comments = [];
+  }
 }
