@@ -29,7 +29,11 @@ import {
   GetPostResponse,
 } from './responses';
 import { IUserId } from './interfaces';
-import { ErrorValidationResponse, NotFoundResponse } from 'src/app.response';
+import {
+  ErrorValidationResponse,
+  NotFoundResponse,
+  SuccessResponse,
+} from 'src/app.response';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
@@ -128,14 +132,10 @@ export class PostsController {
   })
   update(
     @Param('id') id: string,
-    @Req() req,
     @Body() updatePostDto: UpdatePostDto,
     @Res() res: Response,
   ) {
-    const data: UpdatePostDto & IUserId = {
-      ...updatePostDto,
-      user_id: req.user.id,
-    };
+    const data: UpdatePostDto = updatePostDto;
 
     const post = this.postsService.update(+id, data);
     if (!post) {
@@ -184,5 +184,19 @@ export class PostsController {
       success: true,
       message: 'Post deleted successfully',
     });
+  }
+
+  @Delete('reset')
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+    type: SuccessResponse,
+  })
+  async reset() {
+    await this.postsService.reset();
+    return {
+      success: true,
+      message: 'Reset posts successfully',
+    };
   }
 }

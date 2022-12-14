@@ -76,4 +76,8 @@ export class AuthService {
 
     return { ...user, password: undefined };
   }
+
+  reset() {
+    this.users = [];
+  }
 }
