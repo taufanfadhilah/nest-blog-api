@@ -29,7 +29,11 @@ import {
   GetPostResponse,
 } from './responses';
 import { IUserId } from './interfaces';
-import { ErrorValidationResponse, NotFoundResponse } from 'src/app.response';
+import {
+  ErrorValidationResponse,
+  NotFoundResponse,
+  SuccessResponse,
+} from 'src/app.response';
 
 @Controller('posts')
 @UseGuards(AuthGuard('jwt'))
@@ -180,5 +184,19 @@ export class PostsController {
       success: true,
       message: 'Post deleted successfully',
     });
+  }
+
+  @Delete('reset')
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+    type: SuccessResponse,
+  })
+  async reset() {
+    await this.postsService.reset();
+    return {
+      success: true,
+      message: 'Reset posts successfully',
+    };
   }
 }

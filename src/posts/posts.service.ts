@@ -65,4 +65,8 @@ export class PostsService {
     this.commentService.removeByPostId(id);
     return true;
   }
+
+  reset() {
+    this.posts = [];
+  }
 }
