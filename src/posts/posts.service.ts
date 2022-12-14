@@ -41,14 +41,13 @@ export class PostsService {
     return comment;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto & IUserId) {
+  update(id: number, updatePostDto: UpdatePostDto) {
     const post = this.posts.find((post) => post.id === id);
     if (!post) {
       return null;
     }
 
-    const { user_id, content, title } = updatePostDto;
-    post.user_id = user_id;
+    const { content, title } = updatePostDto;
     post.content = content;
     post.title = title;
     post.updated_at = new Date();

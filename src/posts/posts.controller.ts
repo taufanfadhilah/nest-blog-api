@@ -128,14 +128,10 @@ export class PostsController {
   })
   update(
     @Param('id') id: string,
-    @Req() req,
     @Body() updatePostDto: UpdatePostDto,
     @Res() res: Response,
   ) {
-    const data: UpdatePostDto & IUserId = {
-      ...updatePostDto,
-      user_id: req.user.id,
-    };
+    const data: UpdatePostDto = updatePostDto;
 
     const post = this.postsService.update(+id, data);
     if (!post) {
