@@ -153,6 +153,20 @@ export class PostsController {
     };
   }
 
+  @Delete('reset')
+  @ApiResponse({
+    status: 200,
+    description: 'success',
+    type: SuccessResponse,
+  })
+  async reset() {
+    await this.postsService.reset();
+    return {
+      success: true,
+      message: 'Reset posts successfully',
+    };
+  }
+
   @Delete(':id')
   @ApiParam({
     name: 'id',
@@ -184,19 +198,5 @@ export class PostsController {
       success: true,
       message: 'Post deleted successfully',
     });
-  }
-
-  @Delete('reset')
-  @ApiResponse({
-    status: 200,
-    description: 'success',
-    type: SuccessResponse,
-  })
-  async reset() {
-    await this.postsService.reset();
-    return {
-      success: true,
-      message: 'Reset posts successfully',
-    };
   }
 }

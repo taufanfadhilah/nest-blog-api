@@ -72,6 +72,15 @@ export class CommentsController {
     });
   }
 
+  @Delete('reset')
+  async reset() {
+    await this.commentsService.reset();
+    return {
+      success: true,
+      message: 'Reset comments successfully',
+    };
+  }
+
   @Delete(':id')
   @ApiParam({
     name: 'id',
@@ -103,14 +112,5 @@ export class CommentsController {
       success: true,
       message: 'Comment deleted successfully',
     });
-  }
-
-  @Delete('reset')
-  async reset() {
-    await this.commentsService.reset();
-    return {
-      success: true,
-      message: 'Reset comments successfully',
-    };
   }
 }
