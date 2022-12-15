@@ -154,11 +154,11 @@ export class PostsController {
       });
     }
 
-    return {
+    return res.json({
       success: true,
       message: 'Post updated successfully',
       data: post,
-    };
+    });
   }
 
   @Delete('reset')
