@@ -66,7 +66,7 @@ export class CommentsController {
       });
     }
 
-    return res.status(HttpStatus.OK).json({
+    return res.status(HttpStatus.CREATED).json({
       success: true,
       message: 'Comment created successfully',
       data: comment,
