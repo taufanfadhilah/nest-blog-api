@@ -62,6 +62,7 @@ export class CommentsController {
       return res.status(HttpStatus.NOT_FOUND).json({
         success: false,
         message: 'Can not create comment, post not found',
+        data: null,
       });
     }
 
@@ -105,6 +106,7 @@ export class CommentsController {
       return res.status(HttpStatus.NOT_FOUND).json({
         success: false,
         message: 'Comment not found',
+        data: null,
       });
     }
 

@@ -199,6 +199,7 @@ export class PostsController {
       return res.status(HttpStatus.NOT_FOUND).json({
         success: false,
         message: 'Post not found',
+        data: null,
       });
     }
 
