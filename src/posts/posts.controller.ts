@@ -99,13 +99,21 @@ export class PostsController {
     description: 'success',
     type: GetPostResponse,
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @Res() res: Response) {
     const post = this.postsService.findOne(+id);
-    return {
+    if (!post) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        success: false,
+        message: 'Post not found',
+        data: null,
+      });
+    }
+
+    return res.json({
       success: true,
       message: 'Get a post',
       data: post,
-    };
+    });
   }
 
   @Patch(':id')
