@@ -14,10 +14,16 @@ export class PostsService {
   ) {}
 
   private posts: IPost[] = [];
+
+  private getNewId() {
+    const postLength = this.posts.length;
+    return this.posts[postLength - 1]?.id + 1 || 1;
+  }
+
   create(createPostDto: CreatePostDto & IUserId) {
     const data: IPost = {
       ...createPostDto,
-      id: this.posts.length + 1,
+      id: this.getNewId(),
       created_at: new Date(),
       updated_at: new Date(),
     };
