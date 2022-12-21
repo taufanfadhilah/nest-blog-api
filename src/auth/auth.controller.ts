@@ -18,7 +18,7 @@ import {
   RegisterEmailExistsResponse,
   RegisterSuccessResponse,
 } from './responses';
-import { ApiTags, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import LoginDto from './dto/login.dto';
 import { SuccessResponse, UnauthorizedResponse } from 'src/app.response';
 
@@ -84,6 +84,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'success',
